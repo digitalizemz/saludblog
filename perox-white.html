@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación de Salud Masculina | Resultado Personalizado</title>
+<meta name="description" content="Responde 7 preguntas y descubre tu perfil de salud masculina con recomendaciones personalizadas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-light: #243155;
+    --gold: #c9a84c;
+    --gold-light: #e4c97a;
+    --cream: #faf8f4;
+    --white: #ffffff;
+    --gray-light: #f0ede8;
+    --gray-mid: #c8c2b8;
+    --gray-text: #6b6560;
+    --green: #2d7a4f;
+    --green-light: #e8f5ee;
+    --shadow: 0 8px 40px rgba(26,39,68,0.10);
+    --radius: 18px;
+    --radius-sm: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--navy); min-height: 100vh; }
+
+  .header { background: var(--navy); padding: 14px 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+  .header-logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.15rem; letter-spacing: 0.04em; }
+  .header-sub { color: rgba(255,255,255,0.55); font-size: 0.7rem; margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  .disclaimer-stripe { background: #f0ede8; border-bottom: 1px solid #ddd8cf; padding: 7px 20px; text-align: center; font-size: 0.68rem; color: var(--gray-text); line-height: 1.4; }
+  .disclaimer-stripe strong { color: var(--navy); }
+
+  .main { max-width: 560px; margin: 0 auto; padding: 28px 16px 60px; }
+
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .progress-label { font-size: 0.75rem; color: var(--gray-text); font-weight: 500; letter-spacing: 0.04em; }
+  .progress-pct { font-size: 0.75rem; font-weight: 600; color: var(--gold); }
+  .progress-track { height: 6px; background: var(--gray-light); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); }
+
+  .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px 24px 28px; animation: fadeUp 0.4s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+  .q-number { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  .q-number span { display: inline-block; width: 22px; height: 22px; background: var(--navy); color: var(--white); border-radius: 50%; text-align: center; line-height: 22px; font-size: 0.68rem; }
+  .q-title { font-family: 'Playfair Display', serif; font-size: 1.28rem; font-weight: 700; color: var(--navy); line-height: 1.4; margin-bottom: 8px; }
+  .q-subtitle { font-size: 0.82rem; color: var(--gray-text); margin-bottom: 24px; line-height: 1.5; }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt-btn { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 2px solid var(--gray-light); border-radius: var(--radius-sm); background: var(--cream); cursor: pointer; transition: all 0.22s ease; text-align: left; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--navy); font-weight: 500; line-height: 1.4; }
+  .opt-btn:hover { border-color: var(--gold); background: #fdf9f0; transform: translateX(4px); }
+  .opt-btn.selected { border-color: var(--navy); background: var(--navy); color: var(--white); }
+  .opt-icon { font-size: 1.3rem; flex-shrink: 0; width: 32px; text-align: center; }
+
+  .scale-wrap { margin-top: 8px; }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--gray-text); margin-bottom: 10px; }
+  .scale-btns { display: flex; gap: 8px; }
+  .scale-btn { flex: 1; aspect-ratio: 1; max-width: 52px; border: 2px solid var(--gray-light); background: var(--cream); border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 600; color: var(--navy); cursor: pointer; transition: all 0.2s ease; font-family: 'DM Sans', sans-serif; }
+  .scale-btn:hover { border-color: var(--gold); background: #fdf9f0; }
+  .scale-btn.selected { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  .btn-next { width: 100%; margin-top: 22px; padding: 16px; background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; letter-spacing: 0.02em; transition: all 0.22s ease; display: none; }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,39,68,0.2); }
+  .btn-next.visible { display: block; animation: fadeUp 0.3s ease; }
+
+  .intro-screen { text-align: center; }
+  .intro-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-light); color: var(--green); font-size: 0.72rem; font-weight: 600; padding: 6px 14px; border-radius: 99px; margin-bottom: 20px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .intro-title { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: var(--navy); line-height: 1.3; margin-bottom: 14px; }
+  .intro-title em { color: var(--gold); font-style: normal; }
+  .intro-desc { font-size: 0.9rem; color: var(--gray-text); line-height: 1.65; margin-bottom: 28px; }
+  .intro-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; text-align: left; }
+  .intro-feature { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; color: var(--navy); font-weight: 500; }
+  .intro-feature-icon { width: 32px; height: 32px; background: var(--green-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .btn-start { width: 100%; padding: 18px; background: linear-gradient(135deg, #1a2744, #243155); color: var(--white); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 600; cursor: pointer; letter-spacing: 0.02em; transition: all 0.22s ease; position: relative; overflow: hidden; }
+  .btn-start::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg, var(--gold), var(--gold-light)); opacity:0; transition:opacity 0.3s ease; }
+  .btn-start:hover::after { opacity:1; }
+  .btn-start span { position:relative; z-index:1; }
+  .intro-note { margin-top: 14px; font-size: 0.72rem; color: var(--gray-text); display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+  .loading-screen { text-align: center; padding: 20px 0; }
+  .loading-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .loading-sub { font-size: 0.82rem; color: var(--gray-text); margin-bottom: 32px; }
+  .loading-bar-wrap { background: var(--gray-light); border-radius: 99px; height: 8px; overflow: hidden; margin-bottom: 10px; }
+  .loading-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--navy), var(--gold)); border-radius: 99px; transition: width 0.4s ease; }
+  .loading-status { font-size: 0.75rem; color: var(--gray-text); margin-bottom: 24px; min-height: 18px; }
+  .loading-steps { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+  .loading-step { display: flex; align-items: center; gap: 12px; font-size: 0.82rem; color: var(--gray-text); transition: color 0.3s ease; }
+  .loading-step.done { color: var(--green); }
+  .loading-step-icon { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--gray-mid); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; transition: all 0.3s ease; flex-shrink: 0; }
+  .loading-step.done .loading-step-icon { background: var(--green); border-color: var(--green); color: white; }
+
+  .result-header { text-align: center; margin-bottom: 24px; }
+  .result-score-wrap { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; background: var(--navy); border-radius: 20px; padding: 20px 32px; margin-bottom: 16px; }
+  .result-score-label { font-size: 0.7rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; }
+  .result-score-value { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; color: var(--gold); line-height: 1; }
+  .result-score-max { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+  .result-profile { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .result-tagline { font-size: 0.85rem; color: var(--gray-text); line-height: 1.55; max-width: 380px; margin: 0 auto 24px; }
+
+  .result-areas { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+  .result-area { background: var(--cream); border-radius: var(--radius-sm); padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .result-area-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .result-area-content { flex: 1; }
+  .result-area-label { font-size: 0.78rem; font-weight: 600; color: var(--navy); margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .result-area-bar { height: 6px; background: var(--gray-light); border-radius: 99px; overflow: hidden; }
+  .result-area-fill { height: 100%; border-radius: 99px; transition: width 1s ease 0.5s; }
+  .fill-red { background: #e74c3c; }
+  .fill-orange { background: #e67e22; }
+  .fill-yellow { background: #f1c40f; }
+  .fill-green { background: var(--green); }
+
+  .result-highlight { background: linear-gradient(135deg, #fff9ee, #fff4dc); border: 1.5px solid var(--gold-light); border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 24px; }
+  .result-highlight-title { font-size: 0.78rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .result-highlight-text { font-size: 0.88rem; color: var(--navy); line-height: 1.6; }
+
+  .result-cta { background: var(--navy); border-radius: var(--radius); padding: 24px 20px; text-align: center; margin-bottom: 16px; }
+  .result-cta-tag { display: inline-block; background: var(--gold); color: var(--navy); font-size: 0.68rem; font-weight: 700; padding: 4px 12px; border-radius: 99px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .result-cta-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--white); font-weight: 700; margin-bottom: 8px; line-height: 1.35; }
+  .result-cta-desc { font-size: 0.82rem; color: rgba(255,255,255,0.65); margin-bottom: 20px; line-height: 1.55; }
+  .btn-cta { display: block; width: 100%; padding: 17px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy); border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.22s ease; letter-spacing: 0.01em; }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.35); }
+  .result-cta-secure { margin-top: 12px; font-size: 0.7rem; color: rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+  .result-social-proof { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.75rem; color: var(--gray-text); margin-bottom: 20px; }
+  .avatars { display: flex; }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; border: 2px solid white; background: var(--navy-light); color: var(--gold); font-size: 0.6rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-left: -6px; }
+  .avatar:first-child { margin-left: 0; }
+
+  .footer-disclaimer { margin-top: 40px; padding: 20px 16px; border-top: 1px solid var(--gray-light); font-size: 0.66rem; color: #aaa; text-align: center; line-height: 1.6; max-width: 560px; margin-left: auto; margin-right: auto; }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 400px) {
+    .q-title { font-size: 1.12rem; }
+    .intro-title { font-size: 1.4rem; }
+    .card { padding: 24px 18px 22px; }
+    .scale-btns { gap: 5px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">VitalMasculino</div>
+  <div class="header-sub">Evaluación de Salud Personalizada</div>
+</header>
+
+<div class="disclaimer-stripe">
+  <strong>Aviso:</strong> Este sitio web es independiente y no tiene ningún vínculo ni afiliación con Facebook, Meta Platforms, Inc. ni ninguna de sus subsidiarias.
+</div>
+
+<div class="main">
+
+  <div id="screen-intro" class="card intro-screen">
+    <div class="intro-badge">✔ Evaluación Gratuita</div>
+    <h1 class="intro-title">Descubre tu <em>Perfil de Vitalidad</em> Masculina</h1>
+    <p class="intro-desc">Responde 7 preguntas rápidas y recibe un análisis personalizado sobre tu energía, bienestar y vitalidad — con recomendaciones basadas en tu perfil único.</p>
+    <div class="intro-features">
+      <div class="intro-feature">
+        <div class="intro-feature-icon">⏱</div>
+        <span>Toma menos de 2 minutos en completar</span>
+      </div>
+      <div class="intro-feature">
+        <div class="intro-feature-icon">🔒</div>
+        <span>Tus respuestas son privadas y confidenciales</span>
+      </div>
+      <div class="intro-feature">
+        <div class="intro-feature-icon">📋</div>
+        <span>Resultado personalizado al final con recomendaciones</span>
+      </div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()"><span>Iniciar Evaluación Gratuita →</span></button>
+    <p class="intro-note">🔐 100% seguro &nbsp;·&nbsp; Sin registro necesario</p>
+  </div>
+
+  <div id="progress-wrap" class="progress-wrap hidden">
+    <div class="progress-meta">
+      <span class="progress-label" id="progress-label">Pregunta 1 de 7</span>
+      <span class="progress-pct" id="progress-pct">14%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:14%"></div>
+    </div>
+  </div>
+
+  <div id="screen-quiz" class="hidden"></div>
+
+  <div id="screen-loading" class="card loading-screen hidden">
+    <div class="loading-title">Analizando tus respuestas…</div>
+    <div class="loading-sub">Espera mientras creamos tu perfil personalizado</div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar" id="loading-bar"></div>
+    </div>
+    <div class="loading-status" id="loading-status">Iniciando análisis…</div>
+    <div class="loading-steps">
+      <div class="loading-step" id="ls-1"><div class="loading-step-icon">1</div> Evaluando nivel de energía y disposición</div>
+      <div class="loading-step" id="ls-2"><div class="loading-step-icon">2</div> Analizando patrones de sueño y recuperación</div>
+      <div class="loading-step" id="ls-3"><div class="loading-step-icon">3</div> Calculando indicadores de vitalidad</div>
+      <div class="loading-step" id="ls-4"><div class="loading-step-icon">4</div> Generando recomendaciones personalizadas</div>
+    </div>
+  </div>
+
+  <div id="screen-result" class="hidden"></div>
+
+</div>
+
+<div class="footer-disclaimer">
+  <p><strong>Aviso Legal:</strong> Este sitio y su contenido son de naturaleza educativa e informativa. La información aquí presentada no constituye asesoramiento médico y no debe reemplazar la consulta con un profesional de salud calificado. Siempre consulta a tu médico antes de iniciar cualquier protocolo de suplementación o cambio en tu estilo de vida.</p>
+  <br>
+  <p>Este sitio no está patrocinado, respaldado, administrado ni asociado con Facebook, Meta Platforms, Inc., Instagram ni ninguna plataforma de redes sociales. Las marcas mencionadas son propiedad de sus respectivos titulares.</p>
+  <br>
+  <p>Los resultados presentados se basan en tus respuestas y tienen fines informativos. Los resultados individuales pueden variar. © 2025 VitalMasculino · Todos los derechos reservados.</p>
+</div>
+
+<script>
+const questions = [
+  {
+    id: 1, type: 'options', tag: 'Energía & Disposición',
+    title: '¿Cómo describirías tu nivel de energía a lo largo del día?',
+    subtitle: 'Piensa en tu rutina típica de las últimas 2 semanas.',
+    options: [
+      { icon: '⚡', text: 'Excelente — me siento activo y productivo', value: 4 },
+      { icon: '😊', text: 'Bueno — energía estable la mayor parte del tiempo', value: 3 },
+      { icon: '😐', text: 'Regular — tengo altibajos frecuentes durante el día', value: 2 },
+      { icon: '😔', text: 'Bajo — me siento cansado casi todo el tiempo', value: 1 },
+    ]
+  },
+  {
+    id: 2, type: 'options', tag: 'Sueño & Recuperación',
+    title: '¿Cómo es la calidad de tu sueño la mayoría de las noches?',
+    subtitle: 'Considera la facilidad para dormir y cómo te sientes al despertar.',
+    options: [
+      { icon: '😴', text: 'Excelente — duermo bien y me despierto descansado', value: 4 },
+      { icon: '🌙', text: 'Buena — duermo razonablemente, aunque a veces me levanto cansado', value: 3 },
+      { icon: '💤', text: 'Irregular — sueño agitado o interrumpido con frecuencia', value: 2 },
+      { icon: '😫', text: 'Mala — tengo gran dificultad para dormir o descansar', value: 1 },
+    ]
+  },
+  {
+    id: 3, type: 'scale', tag: 'Motivación & Bienestar',
+    title: '¿Cómo evalúas tu motivación e interés en actividades que antes te daban satisfacción?',
+    subtitle: 'En una escala del 1 (muy bajo) al 5 (muy alto)',
+    scaleMin: 'Muy bajo', scaleMax: 'Muy alto',
+  },
+  {
+    id: 4, type: 'options', tag: 'Fuerza & Físico',
+    title: '¿Cómo evalúas tu fuerza física y disposición para actividades cotidianas?',
+    subtitle: 'Subir escaleras, cargar objetos, practicar ejercicio.',
+    options: [
+      { icon: '💪', text: 'Excelente — me siento fuerte y activo', value: 4 },
+      { icon: '🏃', text: 'Buena — puedo hacer mis actividades sin dificultad', value: 3 },
+      { icon: '🚶', text: 'Regular — me canso más fácilmente que antes', value: 2 },
+      { icon: '😓', text: 'Débil — he perdido fuerza y resistencia notablemente', value: 1 },
+    ]
+  },
+  {
+    id: 5, type: 'options', tag: 'Humor & Mente',
+    title: 'En los últimos 30 días, ¿cómo ha estado tu estado emocional y concentración?',
+    subtitle: 'Incluye disposición mental, enfoque y estabilidad emocional.',
+    options: [
+      { icon: '😎', text: 'Excelente — enfoque alto y humor estable', value: 4 },
+      { icon: '🙂', text: 'Bueno — la mayoría de los días me siento equilibrado', value: 3 },
+      { icon: '😶', text: 'Regular — irritabilidad o falta de enfoque con frecuencia', value: 2 },
+      { icon: '😞', text: 'Difícil — humor bajo y dificultad para concentrarme', value: 1 },
+    ]
+  },
+  {
+    id: 6, type: 'options', tag: 'Estilo de Vida',
+    title: '¿Cómo es tu alimentación y rutina de ejercicio actualmente?',
+    subtitle: 'Evalúa honestamente tus hábitos generales de salud.',
+    options: [
+      { icon: '🥗', text: 'Equilibrada — me alimento bien y hago ejercicio regularmente', value: 4 },
+      { icon: '🍽️', text: 'Razonable — intento cuidarme, pero no siempre lo logro', value: 3 },
+      { icon: '🍔', text: 'Irregular — mi alimentación y ejercicio podrían mejorar', value: 2 },
+      { icon: '😅', text: 'Necesito mejorar bastante en ambas áreas', value: 1 },
+    ]
+  },
+  {
+    id: 7, type: 'scale', tag: 'Autoevaluación General',
+    title: 'En general, ¿cómo te evalúas en términos de salud y vitalidad masculina?',
+    subtitle: 'En una escala del 1 (necesito mejorar mucho) al 5 (excelente)',
+    scaleMin: 'Necesito mejorar', scaleMax: 'Excelente',
+  },
+];
+
+let currentQ = 0;
+let answers = [];
+
+function startQuiz() {
+  document.getElementById('screen-intro').classList.add('hidden');
+  document.getElementById('progress-wrap').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  const pct = Math.round(((currentQ + 1) / questions.length) * 100);
+  document.getElementById('progress-label').textContent = `Pregunta ${currentQ + 1} de ${questions.length}`;
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  let html = `<div class="card"><div class="q-number"><span>${currentQ + 1}</span> ${q.tag}</div><h2 class="q-title">${q.title}</h2><p class="q-subtitle">${q.subtitle}</p>`;
+
+  if (q.type === 'options') {
+    html += `<div class="options">`;
+    q.options.forEach(opt => {
+      html += `<button class="opt-btn" onclick="selectOption(this,${opt.value})"><span class="opt-icon">${opt.icon}</span><span>${opt.text}</span></button>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<div class="scale-wrap"><div class="scale-labels"><span>${q.scaleMin}</span><span>${q.scaleMax}</span></div><div class="scale-btns">`;
+    for (let v = 1; v <= 5; v++) html += `<button class="scale-btn" onclick="selectScale(this,${v})">${v}</button>`;
+    html += `</div></div>`;
+  }
+
+  html += `<button class="btn-next" id="btn-next" onclick="nextQuestion()">Siguiente →</button></div>`;
+
+  const screen = document.getElementById('screen-quiz');
+  screen.innerHTML = html;
+  screen.classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectOption(el, value) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[currentQ] = value;
+  document.getElementById('btn-next').classList.add('visible');
+}
+
+function selectScale(el, value) {
+  document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[currentQ] = Math.round((value / 5) * 4);
+  document.getElementById('btn-next').classList.add('visible');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) showLoading();
+  else renderQuestion();
+}
+
+function showLoading() {
+  document.getElementById('screen-quiz').classList.add('hidden');
+  document.getElementById('progress-wrap').classList.add('hidden');
+  const ls = document.getElementById('screen-loading');
+  ls.classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const bar = document.getElementById('loading-bar');
+  const status = document.getElementById('loading-status');
+  const steps = ['ls-1','ls-2','ls-3','ls-4'];
+  const msgs = [
+    'Evaluando nivel de energía y disposición…',
+    'Analizando patrones de sueño y recuperación…',
+    'Calculando indicadores de vitalidad…',
+    'Generando recomendaciones personalizadas…',
+    'Finalizando tu perfil…'
+  ];
+  let progress = 0, stepIdx = 0;
+
+  const iv = setInterval(() => {
+    progress += Math.random() * 18 + 8;
+    if (progress > 100) progress = 100;
+    bar.style.width = progress + '%';
+    status.textContent = msgs[Math.min(Math.floor((progress/100)*msgs.length), msgs.length-1)];
+    const ns = Math.floor((progress/100)*steps.length);
+    while (stepIdx < ns && stepIdx < steps.length) {
+      document.getElementById(steps[stepIdx]).classList.add('done');
+      stepIdx++;
+    }
+    if (progress >= 100) { clearInterval(iv); setTimeout(showResult, 600); }
+  }, 300);
+}
+
+function showResult() {
+  const score = answers.reduce((a,b)=>a+b,0);
+  const maxScore = questions.length * 4;
+  const pct = Math.round((score / maxScore) * 100);
+
+  let profile, tagline, highlight;
+  if (pct >= 80) {
+    profile = 'Perfil Alpha — Alta Vitalidad';
+    tagline = 'Tus indicadores muestran un nivel excelente de salud masculina. ¡Vas por el camino correcto! Pequeños ajustes pueden llevar tu rendimiento al siguiente nivel.';
+    highlight = 'Los hombres con tu perfil generalmente buscan potenciar aún más sus resultados. El enfoque ideal es mantener la consistencia y acelerar las ganancias ya existentes en energía y vitalidad.';
+  } else if (pct >= 60) {
+    profile = 'Perfil Beta — Vitalidad Moderada';
+    tagline = 'Tienes una base sólida, pero hay áreas específicas donde tu vitalidad puede potenciarse con los ajustes correctos.';
+    highlight = 'Los hombres con tu perfil frecuentemente notan que pequeños cambios en la rutina generan grandes resultados en energía, disposición y bienestar general en poco tiempo.';
+  } else if (pct >= 40) {
+    profile = 'Perfil Sigma — Atención Recomendada';
+    tagline = 'Tu evaluación revela que algunos aspectos esenciales de la salud masculina merecen atención. Hay un potencial significativo de mejora disponible para ti.';
+    highlight = 'Para hombres con tu perfil, existe una oportunidad real de recuperar energía, disposición y bienestar con las estrategias correctas y el apoyo adecuado.';
+  } else {
+    profile = 'Perfil Omega — Apoyo Prioritario';
+    tagline = 'Tu perfil indica que múltiples aspectos de tu vitalidad necesitan apoyo. La buena noticia: es totalmente posible revertir este cuadro.';
+    highlight = 'Muchos hombres con un perfil similar lograron una transformación significativa al adoptar un protocolo estructurado de recuperación de la vitalidad masculina.';
+  }
+
+  const areaData = [
+    { label: 'Energía & Disposición', icon: '⚡', val: answers[0]||2, max:4 },
+    { label: 'Calidad del Sueño', icon: '🌙', val: answers[1]||2, max:4 },
+    { label: 'Motivación & Bienestar', icon: '🔥', val: answers[2]||2, max:4 },
+    { label: 'Fuerza Física', icon: '💪', val: answers[3]||2, max:4 },
+    { label: 'Humor & Enfoque Mental', icon: '🧠', val: answers[4]||2, max:4 },
+  ];
+
+  function getColor(v,m){const p=v/m;return p>=.75?'fill-green':p>=.5?'fill-yellow':p>=.25?'fill-orange':'fill-red';}
+
+  const areasHtml = areaData.map(a=>{
+    const w=Math.round((a.val/a.max)*100);
+    return `<div class="result-area"><span class="result-area-icon">${a.icon}</span><div class="result-area-content"><div class="result-area-label"><span>${a.label}</span><span>${w}%</span></div><div class="result-area-bar"><div class="result-area-fill ${getColor(a.val,a.max)}" style="width:${w}%"></div></div></div></div>`;
+  }).join('');
+
+  const html = `
+    <div class="card">
+      <div class="result-header">
+        <div class="result-score-wrap">
+          <span class="result-score-label">Puntuación de Vitalidad</span>
+          <span class="result-score-value">${pct}</span>
+          <span class="result-score-max">de 100 puntos</span>
+        </div>
+        <h2 class="result-profile">${profile}</h2>
+        <p class="result-tagline">${tagline}</p>
+      </div>
+      <div class="result-areas">${areasHtml}</div>
+      <div class="result-highlight">
+        <div class="result-highlight-title">📋 Análisis de Tu Perfil</div>
+        <p class="result-highlight-text">${highlight}</p>
+      </div>
+      <div class="result-social-proof">
+        <div class="avatars">
+          <div class="avatar">JM</div><div class="avatar">CR</div><div class="avatar">AS</div><div class="avatar">+</div>
+        </div>
+        <span>+2.400 hombres ya recibieron su resultado hoy</span>
+      </div>
+      <div class="result-cta">
+        <span class="result-cta-tag">✦ Recomendado para tu perfil</span>
+        <h3 class="result-cta-title">Protocolo Personalizado de Vitalidad Masculina</h3>
+        <p class="result-cta-desc">Basado en tu perfil, preparamos un protocolo específico para hombres con tus características — enfocado en energía, disposición y bienestar masculino.</p>
+        <a class="btn-cta" href="https://buy.stripe.com/9B67sN72y0prelAgxc8EM0d" target="_blank" rel="noopener noreferrer">Ver Mi Protocolo Personalizado →</a>
+        <div class="result-cta-secure">🔒 Compra segura &nbsp;·&nbsp; Acceso inmediato &nbsp;·&nbsp; Garantía incluida</div>
+      </div>
+      <div style="font-size:0.72rem;color:var(--gray-text);text-align:center;line-height:1.5;margin-top:8px;">
+        Este sitio no tiene afiliación con Facebook ni Meta Platforms, Inc.<br>
+        Las recomendaciones se basan en tu perfil de respuestas y tienen fines informativos.
+      </div>
+    </div>
+  `;
+
+  document.getElementById('screen-loading').classList.add('hidden');
+  const rs = document.getElementById('screen-result');
+  rs.innerHTML = html;
+  rs.classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  setTimeout(() => {
+    document.querySelectorAll('.result-area-fill').forEach(el => {
+      const w = el.style.width; el.style.width = '0%';
+      setTimeout(() => { el.style.width = w; }, 100);
+    });
+  }, 200);
+}
+</script>
+</body>
+</html>
